@@ -48,21 +48,16 @@ export default {
     stats: {
       immidiate: true,
       handler: function (val) {
-        console.log(val);
+        // create data for chart
         const newHashRates = new Array();
         const repHashrates = new Array();
         for (let i in val) {
           const dto = val[i];
-          //   newHashRates.push([new Date(dto.time * 1000), dto.currentHashrate]);
           newHashRates.push([dto.time * 1000, dto.currentHashrate]);
-          //   repHashrates.push([new Date(dto.time * 1000), dto.reportedHashrate]);
           repHashrates.push([dto.time * 1000, dto.reportedHashrate]);
         }
-        // const hashrates = val.map((dto) => dto.currentHashrate);
-        // this.options.series[0].data = hashrates;
+        // set to chart
         this.options.series[0].data = newHashRates;
-
-        // const repHashrates = val.map((dto) => dto.reportedHashrate);
         this.options.series[1].data = repHashrates;
       },
     },
