@@ -3,7 +3,11 @@
     <Header title="Ethermine Stats" />
     <h3>0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
     <Averages :avgStats="avgStats" />
-    <Chart :stats="allStats" />
+    <div class="charts">
+      <UsdChart :stats="allStats" />
+      <CoinChart :stats="allStats" />
+      <Chart :stats="allStats" />
+    </div>
   </div>
 </template>
 
@@ -11,6 +15,8 @@
 import Header from "./components/Header";
 import Averages from "./components/Averages";
 import Chart from "./components/Chart";
+import CoinChart from "./components/CoinChart";
+import UsdChart from "./components/UsdChart";
 
 export default {
   name: "App",
@@ -18,6 +24,8 @@ export default {
     Header,
     Averages,
     Chart,
+    CoinChart,
+    UsdChart,
   },
   data() {
     return {
@@ -78,5 +86,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.charts {
+  margin: 2rem;
 }
 </style>

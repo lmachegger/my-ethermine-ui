@@ -6,7 +6,7 @@
 import VueHighcharts from "vue3-highcharts";
 
 export default {
-  name: "MyChart",
+  name: "UsdChart",
   components: {
     VueHighcharts,
   },
@@ -17,11 +17,11 @@ export default {
     return {
       options: {
         title: {
-          text: "Hashrate MH/s",
+          text: "USD/h",
         },
         yAxis: {
           title: {
-            text: "MH/s",
+            text: "USD/h",
           },
         },
         xAxis: {
@@ -33,11 +33,7 @@ export default {
         },
         series: [
           {
-            name: "Actual Hashrate",
-            data: [],
-          },
-          {
-            name: "Reported Hashrate",
+            name: "USD",
             data: [],
           },
         ],
@@ -49,16 +45,13 @@ export default {
       immidiate: true,
       handler: function (val) {
         // create data for chart
-        const newHashRates = new Array();
-        const repHashrates = new Array();
+        const usd = new Array();
         for (let i in val) {
           const dto = val[i];
-          newHashRates.push([dto.time * 1000, dto.currentHashrate]);
-          repHashrates.push([dto.time * 1000, dto.reportedHashrate]);
+          usd.push([dto.time * 1000, dto.usdPerHour]);
         }
         // set to chart
-        this.options.series[0].data = newHashRates;
-        this.options.series[1].data = repHashrates;
+        this.options.series[0].data = usd;
       },
     },
   },

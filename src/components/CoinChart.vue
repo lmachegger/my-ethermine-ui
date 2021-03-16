@@ -6,7 +6,7 @@
 import VueHighcharts from "vue3-highcharts";
 
 export default {
-  name: "MyChart",
+  name: "CoinChart",
   components: {
     VueHighcharts,
   },
@@ -17,11 +17,11 @@ export default {
     return {
       options: {
         title: {
-          text: "Hashrate MH/s",
+          text: "Coin/h",
         },
         yAxis: {
           title: {
-            text: "MH/s",
+            text: "Coin/h",
           },
         },
         xAxis: {
@@ -33,11 +33,11 @@ export default {
         },
         series: [
           {
-            name: "Actual Hashrate",
+            name: "ETH",
             data: [],
           },
           {
-            name: "Reported Hashrate",
+            name: "BTC",
             data: [],
           },
         ],
@@ -49,16 +49,16 @@ export default {
       immidiate: true,
       handler: function (val) {
         // create data for chart
-        const newHashRates = new Array();
-        const repHashrates = new Array();
+        const eth = new Array();
+        const btc = new Array();
         for (let i in val) {
           const dto = val[i];
-          newHashRates.push([dto.time * 1000, dto.currentHashrate]);
-          repHashrates.push([dto.time * 1000, dto.reportedHashrate]);
+          eth.push([dto.time * 1000, dto.coinsPerHour]);
+          btc.push([dto.time * 1000, dto.btcPerHour]);
         }
         // set to chart
-        this.options.series[0].data = newHashRates;
-        this.options.series[1].data = repHashrates;
+        this.options.series[0].data = eth;
+        this.options.series[1].data = btc;
       },
     },
   },
