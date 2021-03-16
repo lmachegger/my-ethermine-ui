@@ -1,12 +1,18 @@
 <template>
   <div id="app">
     <Header title="Ethermine Stats" />
-    <h3>0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
+    <h3 class="ethWalletAdress">0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
     <Averages :avgStats="avgStats" />
     <div class="charts">
-      <UsdChart :stats="allStats" />
-      <CoinChart :stats="allStats" />
-      <Chart :stats="allStats" />
+      <div class="chart">
+        <UsdChart :stats="allStats" />
+      </div>
+      <div class="chart">
+        <CoinChart :stats="allStats" />
+      </div>
+      <div class="chart">
+        <Chart :stats="allStats" />
+      </div>
     </div>
   </div>
 </template>
@@ -85,9 +91,30 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: auto;
+  margin-top: 2rem;
+}
+@media (min-width: 1000px) {
+  #app {
+    max-width: 80%;
+  }
+}
+@media (min-width: 2000px) {
+  #app {
+    max-width: 70%;
+  }
 }
 .charts {
-  margin: 2rem;
+  margin: 0.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.chart {
+  padding: 2rem;
+}
+.ethWalletAdress {
+  margin-top: 0.2rem;
+  margin-bottom: 1.5rem;
+  font-size: 80%;
 }
 </style>

@@ -17,7 +17,15 @@ export default {
     return {
       options: {
         title: {
-          text: "USD/h",
+          text: "USD",
+          style: {
+            "font-family": "Avenir, Helvetica, Arial, sans-serif",
+            "-webkit-font-smoothing": "antialiased",
+            "-moz-osx-font-smoothing": "grayscale",
+            color: "#2c3e50",
+            "font-weight": "bold",
+            "font-size": "200%",
+          },
         },
         yAxis: {
           title: {
@@ -27,8 +35,8 @@ export default {
         xAxis: {
           type: "datetime",
           tickInterval: 86400 * 1000, // 1 day in ms
-          title: {
-            text: "timestamp",
+          labels: {
+            rotation: 60,
           },
         },
         series: [
