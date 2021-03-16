@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       options: {
+        colors: ["#77a1e5", "#2c3e50"],
         title: {
           text: "Coins",
           style: {
