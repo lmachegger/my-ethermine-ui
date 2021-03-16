@@ -45,7 +45,7 @@ export default {
 
     // get ALL
     const allResponse = await fetch(
-      "https://ethermine-api.herokuapp.com/stats?limit=5"
+      "https://ethermine-api.herokuapp.com/stats"
     );
     const allJson = await allResponse.json();
     const allData = new Array();

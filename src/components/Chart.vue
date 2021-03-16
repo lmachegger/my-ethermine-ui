@@ -16,13 +16,30 @@ export default {
   data() {
     return {
       options: {
+        title: {
+          text: "Hashrate MH/s",
+        },
+        yAxis: {
+          title: {
+            text: "MH/s",
+          },
+        },
+        xAxis: {
+          type: "datetime",
+          tickInterval: 86400 * 1000,
+          title: {
+            text: "timestamp",
+          },
+        },
         series: [
           {
-            data: this.stats?.currentHashrate,
+            name: "Actual Hashrate",
+            data: [],
           },
-          //   //   {
-          //   //     data: [2, 3, 4],
-          //   //   },
+          {
+            name: "Reported Hashrate",
+            data: [],
+          },
         ],
       },
     };
@@ -31,11 +48,22 @@ export default {
     stats: {
       immidiate: true,
       handler: function (val) {
-        const hashrates = val.map((dto) => dto.currentHashrate);
-        this.options.series[0].data = hashrates;
-        // this.options.series.push({
-        //   data: hashrates,
-        // });
+        console.log(val);
+        const newHashRates = new Array();
+        const repHashrates = new Array();
+        for (let i in val) {
+          const dto = val[i];
+          //   newHashRates.push([new Date(dto.time * 1000), dto.currentHashrate]);
+          newHashRates.push([dto.time * 1000, dto.currentHashrate]);
+          //   repHashrates.push([new Date(dto.time * 1000), dto.reportedHashrate]);
+          repHashrates.push([dto.time * 1000, dto.reportedHashrate]);
+        }
+        // const hashrates = val.map((dto) => dto.currentHashrate);
+        // this.options.series[0].data = hashrates;
+        this.options.series[0].data = newHashRates;
+
+        // const repHashrates = val.map((dto) => dto.reportedHashrate);
+        this.options.series[1].data = repHashrates;
       },
     },
   },
