@@ -10,20 +10,34 @@ export default {
   components: {
     VueHighcharts,
   },
+  props: {
+    stats: [Object],
+  },
   data() {
     return {
       options: {
         series: [
           {
-            data: [1, 2, 3],
+            data: this.stats?.currentHashrate,
           },
-          {
-            data: [2, 3, 4],
-          },
+          //   //   {
+          //   //     data: [2, 3, 4],
+          //   //   },
         ],
       },
-      // Highcharts: Highcharts
     };
+  },
+  watch: {
+    stats: {
+      immidiate: true,
+      handler: function (val) {
+        const hashrates = val.map((dto) => dto.currentHashrate);
+        this.options.series[0].data = hashrates;
+        // this.options.series.push({
+        //   data: hashrates,
+        // });
+      },
+    },
   },
 };
 </script>
