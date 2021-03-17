@@ -2,7 +2,10 @@
   <div id="app">
     <Header title="Ethermine Stats" />
     <h3 class="ethWalletAdress">0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
-    <Averages :avgStats="avgStats" />
+    <div class="statList">
+      <Averages :avgStats="avgStats" />
+      <Maximums :maxStats="maxStats" />
+    </div>
     <div class="charts">
       <div class="chart">
         <UsdChart :stats="allStats" />
@@ -20,6 +23,7 @@
 <script>
 import Header from "./components/Header";
 import Averages from "./components/Averages";
+import Maximums from "./components/Maximums";
 import Chart from "./components/Chart";
 import CoinChart from "./components/CoinChart";
 import UsdChart from "./components/UsdChart";
@@ -29,6 +33,7 @@ export default {
   components: {
     Header,
     Averages,
+    Maximums,
     Chart,
     CoinChart,
     UsdChart,
@@ -36,6 +41,7 @@ export default {
   data() {
     return {
       avgStats: {},
+      maxStats: {},
       allStats: [{}],
     };
   },
@@ -55,6 +61,23 @@ export default {
       coinsPerHour: avgJson.coinsPerMin * 60,
       usdPerHour: avgJson.usdPerMin * 60,
       btcPerHour: avgJson.btcPerMin * 60,
+    };
+
+    // get MAX
+    const maxResponse = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/max"
+    );
+    const maxJson = await maxResponse.json();
+    this.maxStats = {
+      reportedHashrate: maxJson.reportedHashrate / 1000000,
+      currentHashrate: maxJson.currentHashrate / 1000000,
+      averageHashrate: maxJson.averageHashrate / 1000000,
+      validShares: maxJson.validShares,
+      invalidShares: maxJson.invalidShares,
+      staleShares: maxJson.staleShares,
+      coinsPerHour: maxJson.coinsPerMin * 60,
+      usdPerHour: maxJson.usdPerMin * 60,
+      btcPerHour: maxJson.btcPerMin * 60,
     };
 
     // get ALL
@@ -94,14 +117,30 @@ export default {
   margin: auto;
   margin-top: 2rem;
 }
-@media (min-width: 1000px) {
+@media (min-width: 800px) {
   #app {
-    max-width: 80%;
+    max-width: 90%;
+  }
+  .statList {
+    display: flex;
+    justify-content: center;
+  }
+  .averages {
+    margin-right: 2rem;
+    margin-left: 2rem;
   }
 }
 @media (min-width: 2000px) {
   #app {
-    max-width: 70%;
+    max-width: 75%;
+  }
+  .statList {
+    display: flex;
+    justify-content: center;
+  }
+  .averages {
+    margin-right: 2rem;
+    margin-left: 2rem;
   }
 }
 .charts {
