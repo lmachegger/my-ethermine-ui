@@ -1,30 +1,46 @@
 <template>
-  <div id="app">
-    <Header title="Ethermine Stats" />
-    <h3 class="ethWalletAdress">0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
-    <div class="filterButtons">
-      <Button title="All" v-on:change-filter="changeFilter" />
-      <Button title="Monthly" v-on:change-filter="changeFilter" />
-      <Button title="Weekly" v-on:change-filter="changeFilter" />
-      <Button title="Daily" v-on:change-filter="changeFilter" />
-    </div>
-    <div class="statList">
-      <Averages :avgStats="avgStats" />
-      <Maximums :maxStats="maxStats" />
-    </div>
-    <div class="charts">
-      <div class="chart">
-        <UsdChart :stats="allStats" />
-      </div>
-      <div class="chart">
-        <CoinChart :stats="allStats" />
-      </div>
-      <div class="chart">
-        <Chart :stats="allStats" />
-      </div>
-    </div>
-    <Footer />
+  <!-- <div id="app"> -->
+  <Header title="Ethermine Stats" />
+  <h3 class="ethWalletAdress">0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
+  <div class="filterButtons">
+    <Button
+      class="filterButtonsButton"
+      title="All"
+      v-on:change-filter="changeFilter"
+    />
+    <Button
+      class="filterButtonsButton"
+      title="Monthly"
+      v-on:change-filter="changeFilter"
+    />
+    <Button
+      class="filterButtonsButton"
+      title="Weekly"
+      v-on:change-filter="changeFilter"
+    />
+    <Button
+      class="filterButtonsButton"
+      title="Daily"
+      v-on:change-filter="changeFilter"
+    />
   </div>
+  <div class="statList">
+    <Averages :avgStats="avgStats" />
+    <Maximums :maxStats="maxStats" />
+  </div>
+  <div class="charts">
+    <div class="chart">
+      <UsdChart :stats="allStats" />
+    </div>
+    <div class="chart">
+      <CoinChart :stats="allStats" />
+    </div>
+    <div class="chart">
+      <Chart :stats="allStats" />
+    </div>
+  </div>
+  <Footer />
+  <!-- </div> -->
 </template>
 
 <script>
@@ -75,6 +91,14 @@ export default {
   methods: {
     changeFilter(filter) {
       console.log("change filter: " + filter);
+      const filterButtons = document.getElementsByClassName(
+        "filterButtonsButton"
+      );
+      for (let button of filterButtons) {
+        button.className = button.className.replace(" active", "");
+      }
+      const button = document.getElementById(filter);
+      button.className += " active";
     },
   },
   async created() {
@@ -117,7 +141,11 @@ export default {
   margin: auto;
   margin-top: 2rem;
 }
-@media (min-width: 700px) {
+.filterButtons {
+  display: flex;
+  justify-content: center;
+}
+@media (min-width: 615px) {
   #app {
     max-width: 90%;
   }
