@@ -11,12 +11,8 @@ export default {
   props: {
     name: String,
     value: {
-      type: Number,
-      default: 1,
-    },
-    multiplier: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: "1",
     },
   },
 };
