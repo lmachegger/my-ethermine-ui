@@ -101,7 +101,7 @@ export default {
   margin: auto;
   margin-top: 2rem;
 }
-@media (min-width: 800px) {
+@media (min-width: 700px) {
   #app {
     max-width: 90%;
   }
