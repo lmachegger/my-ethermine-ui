@@ -91,14 +91,24 @@ export default {
   methods: {
     changeFilter(filter) {
       console.log("change filter: " + filter);
-      const filterButtons = document.getElementsByClassName(
+
+      // TODO: Check if filter actually changed (store filter in data())
+      // if not changed -> early return
+
+      // handle button style
+      // const filterButtons = document.getElementsByClassName(
+      //   "filterButtonsButton"
+      // );
+      for (let button of document.getElementsByClassName(
         "filterButtonsButton"
-      );
-      for (let button of filterButtons) {
+      )) {
         button.className = button.className.replace(" active", "");
       }
       const button = document.getElementById(filter);
       button.className += " active";
+
+      // TODO: filter changed -> update data for components
+      // backend api needs to be updated for this
     },
   },
   async created() {
@@ -127,6 +137,9 @@ export default {
       allData.push(resToData(dto));
     }
     this.allStats = allData;
+  },
+  mounted() {
+    this.changeFilter("All");
   },
 };
 </script>
