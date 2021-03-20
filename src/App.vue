@@ -17,6 +17,7 @@
         <Chart :stats="allStats" />
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -27,6 +28,7 @@ import Maximums from "./components/Maximums";
 import Chart from "./components/Chart";
 import CoinChart from "./components/CoinChart";
 import UsdChart from "./components/UsdChart";
+import Footer from "./components/Footer";
 
 function resToData(res) {
   return {
@@ -53,6 +55,7 @@ export default {
     Chart,
     CoinChart,
     UsdChart,
+    Footer,
   },
   data() {
     return {
