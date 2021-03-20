@@ -2,6 +2,12 @@
   <div id="app">
     <Header title="Ethermine Stats" />
     <h3 class="ethWalletAdress">0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
+    <div class="filterButtons">
+      <Button title="All" v-on:change-filter="changeFilter" />
+      <Button title="Monthly" v-on:change-filter="changeFilter" />
+      <Button title="Weekly" v-on:change-filter="changeFilter" />
+      <Button title="Daily" v-on:change-filter="changeFilter" />
+    </div>
     <div class="statList">
       <Averages :avgStats="avgStats" />
       <Maximums :maxStats="maxStats" />
@@ -29,6 +35,7 @@ import Chart from "./components/Chart";
 import CoinChart from "./components/CoinChart";
 import UsdChart from "./components/UsdChart";
 import Footer from "./components/Footer";
+import Button from "./components/Button";
 
 function resToData(res) {
   return {
@@ -56,6 +63,7 @@ export default {
     CoinChart,
     UsdChart,
     Footer,
+    Button,
   },
   data() {
     return {
@@ -63,6 +71,11 @@ export default {
       maxStats: {},
       allStats: [{}],
     };
+  },
+  methods: {
+    changeFilter(filter) {
+      console.log("change filter: " + filter);
+    },
   },
   async created() {
     // get AVG
