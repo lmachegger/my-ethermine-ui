@@ -28,6 +28,22 @@ import Chart from "./components/Chart";
 import CoinChart from "./components/CoinChart";
 import UsdChart from "./components/UsdChart";
 
+function resToData(res) {
+  return {
+    time: res.time,
+    id: res.id,
+    reportedHashrate: res.reportedHashrate,
+    currentHashrate: res.currentHashrate,
+    averageHashrate: res.averageHashrate,
+    validShares: res.validShares,
+    invalidShares: res.invalidShares,
+    staleShares: res.staleShares,
+    coinsPerHour: res.coinsPerMin,
+    usdPerHour: res.usdPerMin,
+    btcPerHour: res.btcPerMin,
+  };
+}
+
 export default {
   name: "App",
   components: {
@@ -51,34 +67,14 @@ export default {
       "https://ethermine-api.herokuapp.com/stats/average"
     );
     const avgJson = await avgResponse.json();
-    this.avgStats = {
-      reportedHashrate: avgJson.reportedHashrate / 1000000,
-      currentHashrate: avgJson.currentHashrate / 1000000,
-      averageHashrate: avgJson.averageHashrate / 1000000,
-      validShares: avgJson.validShares,
-      invalidShares: avgJson.invalidShares,
-      staleShares: avgJson.staleShares,
-      coinsPerHour: avgJson.coinsPerMin * 60,
-      usdPerHour: avgJson.usdPerMin * 60,
-      btcPerHour: avgJson.btcPerMin * 60,
-    };
+    this.avgStats = resToData(avgJson);
 
     // get MAX
     const maxResponse = await fetch(
       "https://ethermine-api.herokuapp.com/stats/max"
     );
     const maxJson = await maxResponse.json();
-    this.maxStats = {
-      reportedHashrate: maxJson.reportedHashrate / 1000000,
-      currentHashrate: maxJson.currentHashrate / 1000000,
-      averageHashrate: maxJson.averageHashrate / 1000000,
-      validShares: maxJson.validShares,
-      invalidShares: maxJson.invalidShares,
-      staleShares: maxJson.staleShares,
-      coinsPerHour: maxJson.coinsPerMin * 60,
-      usdPerHour: maxJson.usdPerMin * 60,
-      btcPerHour: maxJson.btcPerMin * 60,
-    };
+    this.maxStats = resToData(maxJson);
 
     // get ALL
     const allResponse = await fetch(
@@ -88,19 +84,7 @@ export default {
     const allData = new Array();
     for (let i in allJson) {
       const dto = allJson[i];
-      allData.push({
-        time: dto.time,
-        id: dto.id,
-        reportedHashrate: dto.reportedHashrate / 1000000,
-        currentHashrate: dto.currentHashrate / 1000000,
-        averageHashrate: dto.averageHashrate / 1000000,
-        validShares: dto.validShares,
-        invalidShares: dto.invalidShares,
-        staleShares: dto.staleShares,
-        coinsPerHour: dto.coinsPerMin * 60,
-        usdPerHour: dto.usdPerMin * 60,
-        btcPerHour: dto.btcPerMin * 60,
-      });
+      allData.push(resToData(dto));
     }
     this.allStats = allData;
   },
