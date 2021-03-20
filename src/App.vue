@@ -133,7 +133,8 @@ export default {
   margin-bottom: 1.5rem;
 }
 .chart {
-  padding: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 .ethWalletAdress {
   margin-top: 0.2rem;
