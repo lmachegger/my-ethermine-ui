@@ -65,6 +65,8 @@ export default {
           eth.push([dto.time * 1000, dto.coinsPerHour]);
           btc.push([dto.time * 1000, dto.btcPerHour]);
         }
+        console.log(eth);
+        console.log(btc);
         // set to chart
         this.options.series[0].data = eth;
         this.options.series[1].data = btc;

@@ -1,5 +1,4 @@
 <template>
-  <!-- <div id="app"> -->
   <Header title="Ethermine Stats" />
   <h3 class="ethWalletAdress">0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
   <div class="filterButtons">
@@ -25,22 +24,21 @@
     />
   </div>
   <div class="statList">
-    <Averages :avgStats="avgStats" />
-    <Maximums :maxStats="maxStats" />
+    <Averages :avgStats="allStats.avgStats" />
+    <Maximums :maxStats="stats.maxStats" />
   </div>
   <div class="charts">
     <div class="chart">
-      <UsdChart :stats="allStats" />
+      <UsdChart :stats="stats.stats" />
     </div>
     <div class="chart">
-      <CoinChart :stats="allStats" />
+      <CoinChart :stats="stats.stats" />
     </div>
     <div class="chart">
-      <Chart :stats="allStats" />
+      <Chart :stats="stats.stats" />
     </div>
   </div>
   <Footer />
-  <!-- </div> -->
 </template>
 
 <script>
@@ -52,22 +50,6 @@ import CoinChart from "./components/CoinChart";
 import UsdChart from "./components/UsdChart";
 import Footer from "./components/Footer";
 import Button from "./components/Button";
-
-function resToData(res) {
-  return {
-    time: res.time,
-    id: res.id,
-    reportedHashrate: res.reportedHashrate,
-    currentHashrate: res.currentHashrate,
-    averageHashrate: res.averageHashrate,
-    validShares: res.validShares,
-    invalidShares: res.invalidShares,
-    staleShares: res.staleShares,
-    coinsPerHour: res.coinsPerMin,
-    usdPerHour: res.usdPerMin,
-    btcPerHour: res.btcPerMin,
-  };
-}
 
 export default {
   name: "App",
@@ -83,22 +65,27 @@ export default {
   },
   data() {
     return {
-      avgStats: {},
-      maxStats: {},
-      allStats: [{}],
+      currentFilter: String,
+      stats: {},
+      allStats: {},
+      yearStats: {},
+      monthStats: {},
+      weekStats: {},
+      dayStats: {},
     };
   },
   methods: {
-    changeFilter(filter) {
+    changeFilter(filter, forceUpdate = false) {
+      // early return if filter has not changed
+      if (this.currentFilter === filter && !forceUpdate) {
+        return;
+      }
+
+      // change filter
+      this.currentFilter = filter;
       console.log("change filter: " + filter);
 
-      // TODO: Check if filter actually changed (store filter in data())
-      // if not changed -> early return
-
       // handle button style
-      // const filterButtons = document.getElementsByClassName(
-      //   "filterButtonsButton"
-      // );
       for (let button of document.getElementsByClassName(
         "filterButtonsButton"
       )) {
@@ -109,34 +96,56 @@ export default {
 
       // TODO: filter changed -> update data for components
       // backend api needs to be updated for this
+      switch (filter) {
+        case "All":
+          this.stats = this.allStats;
+          break;
+        case "Yearly":
+          this.stats = this.yearStats;
+          break;
+        case "Monthly":
+          this.stats = this.monthStats;
+          break;
+        case "Weekly":
+          this.stats = this.weekStats;
+          break;
+        case "Daily":
+          this.stats = this.dayStats;
+          break;
+        default:
+          this.stats = this.allStats;
+          break;
+      }
     },
   },
   async created() {
-    // get AVG
-    const avgResponse = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/average"
-    );
-    const avgJson = await avgResponse.json();
-    this.avgStats = resToData(avgJson);
-
-    // get MAX
-    const maxResponse = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/max"
-    );
-    const maxJson = await maxResponse.json();
-    this.maxStats = resToData(maxJson);
-
     // get ALL
-    const allResponse = await fetch(
-      "https://ethermine-api.herokuapp.com/stats"
+    const allRes = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/allStats"
     );
-    const allJson = await allResponse.json();
-    const allData = new Array();
-    for (let i in allJson) {
-      const dto = allJson[i];
-      allData.push(resToData(dto));
-    }
-    this.allStats = allData;
+    this.allStats = await allRes.json();
+    this.changeFilter(this.currentFilter, true);
+
+    const yearRes = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/allStats?interval=YEAR"
+    );
+    this.yearStats = await yearRes.json();
+
+    const monthRes = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH"
+    );
+    this.monthStats = await monthRes.json();
+    console.log(this.monthStats);
+
+    const weekRes = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/allStats?interval=WEEK"
+    );
+    this.weekStats = await weekRes.json();
+
+    const dayRes = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/allStats?interval=DAY"
+    );
+    this.dayStats = await dayRes.json();
   },
   mounted() {
     this.changeFilter("All");
