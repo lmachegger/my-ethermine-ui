@@ -28,20 +28,21 @@
     <Maximums :maxStats="stats.maxStats" />
   </div>
   <div class="charts">
-    <div class="chart">
+    <!-- <div class="chart">
       <UsdChart :stats="stats.stats" />
-    </div>
+    </div> -->
     <div class="chart">
       <CoinChart :stats="stats.stats" />
     </div>
-    <div class="chart">
-      <Chart :stats="stats.stats" />
-    </div>
+    <!-- <div class="chart"> -->
+    <!-- <Chart :stats="stats.stats" /> -->
+    <!-- </div> -->
   </div>
   <Footer />
 </template>
 
 <script>
+/* eslint-disable vue/no-unused-components */
 import Header from "./components/Header";
 import Averages from "./components/Averages";
 import Maximums from "./components/Maximums";
@@ -94,8 +95,7 @@ export default {
       const button = document.getElementById(filter);
       button.className += " active";
 
-      // TODO: filter changed -> update data for components
-      // backend api needs to be updated for this
+      // update stats for chart and statistik
       switch (filter) {
         case "All":
           this.stats = this.allStats;
@@ -119,33 +119,28 @@ export default {
     },
   },
   async created() {
+    fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=YEAR")
+      .then((res) => res.json())
+      .then((res) => (this.yearStats = res));
+
+    fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH")
+      .then((res) => res.json())
+      .then((res) => (this.monthStats = res));
+
+    fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=WEEK")
+      .then((res) => res.json())
+      .then((res) => (this.weekStats = res));
+
+    fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=DAY")
+      .then((res) => res.json())
+      .then((res) => (this.dayStats = res));
+
     // get ALL
     const allRes = await fetch(
       "https://ethermine-api.herokuapp.com/stats/allStats"
     );
     this.allStats = await allRes.json();
     this.changeFilter(this.currentFilter, true);
-
-    const yearRes = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/allStats?interval=YEAR"
-    );
-    this.yearStats = await yearRes.json();
-
-    const monthRes = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH"
-    );
-    this.monthStats = await monthRes.json();
-    console.log(this.monthStats);
-
-    const weekRes = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/allStats?interval=WEEK"
-    );
-    this.weekStats = await weekRes.json();
-
-    const dayRes = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/allStats?interval=DAY"
-    );
-    this.dayStats = await dayRes.json();
   },
   mounted() {
     this.changeFilter("All");
