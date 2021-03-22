@@ -3,16 +3,34 @@
     <h1 class="averageHeading">Average</h1>
     <AvgItem
       name="MH/s reported"
-      :value="avgStats?.reportedHashrate?.toFixed(2)"
+      :value="roundTo2(avgStats?.reportedHashrate)"
+      precision="2"
     />
     <AvgItem
       name="MH/s received"
-      :value="avgStats?.currentHashrate?.toFixed(2)"
+      :value="roundTo2(avgStats?.currentHashrate)"
+      precision="2"
     />
-    <AvgItem name="Shares/h" :value="avgStats?.validShares?.toFixed(2)" />
-    <AvgItem name="ETH/h" :value="avgStats?.coinsPerHour?.toFixed(8)" />
-    <AvgItem name="BTC/h" :value="avgStats?.btcPerHour?.toFixed(8)" />
-    <AvgItem name="USD/h" :value="avgStats?.usdPerHour?.toFixed(8)" />
+    <AvgItem
+      name="Shares/h"
+      :value="roundTo2(avgStats?.validShares)"
+      precision="2"
+    />
+    <AvgItem
+      name="ETH/h"
+      :value="roundTo8(avgStats?.coinsPerHour)"
+      precision="8"
+    />
+    <AvgItem
+      name="BTC/h"
+      :value="roundTo8(avgStats?.btcPerHour)"
+      precision="8"
+    />
+    <AvgItem
+      name="USD/h"
+      :value="roundTo8(avgStats?.usdPerHour)"
+      precision="8"
+    />
   </div>
 </template>
 <script>
@@ -24,6 +42,22 @@ export default {
   },
   props: {
     avgStats: Object,
+  },
+  methods: {
+    roundTo2: function (val) {
+      if (val) {
+        return Math.round(val * 100) / 100;
+      } else {
+        return 0;
+      }
+    },
+    roundTo8: function (val) {
+      if (val) {
+        return Math.round(val * 100000000) / 100000000;
+      } else {
+        return 0;
+      }
+    },
   },
 };
 </script>

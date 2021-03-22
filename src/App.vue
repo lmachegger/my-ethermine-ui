@@ -118,9 +118,9 @@ export default {
     return {
       currentFilter: String,
       stats: {}, // stat for Avg and Max
-      coinStats: {}, // stat for ETH and BTC
-      usdStats: {}, // stat for USD
-      hsStats: {}, // stat for Hashrate
+      coinStats: [], // stat for ETH and BTC
+      usdStats: [], // stat for USD
+      hsStats: [], // stat for Hashrate
       allStats: {}, // fetched stat
       yearStats: {}, // fetched stat
       monthStats: {}, // fetched stat
