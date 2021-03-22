@@ -194,7 +194,7 @@ export default {
 
     // get ALL
     const allRes = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/allStats"
+      "https://ethermine-api.herokuapp.com/alltimestats"
     );
     this.allStats = await allRes.json();
     this.currentFilter = "All";
