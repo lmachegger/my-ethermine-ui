@@ -1,6 +1,6 @@
 <template>
   <div class="averages">
-    <h1 class="averageHeading">All time max</h1>
+    <h1 class="averageHeading">Maximum</h1>
     <AvgItem
       name="MH/s reported"
       :value="maxStats?.reportedHashrate?.toFixed(2)"

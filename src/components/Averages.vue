@@ -1,6 +1,6 @@
 <template>
   <div class="averages">
-    <h1 class="averageHeading">All time avg</h1>
+    <h1 class="averageHeading">Average</h1>
     <AvgItem
       name="MH/s reported"
       :value="avgStats?.reportedHashrate?.toFixed(2)"
