@@ -1,5 +1,14 @@
 <template>
-  <VueHighcharts class="hc" :highcharts="Highcharts" :options="options" />
+  <VueHighcharts
+    v-if="showChart"
+    ref="coinchart"
+    class="hc"
+    :options="options"
+    :deepCopyOnUpdate="false"
+    :redrawOnUpdate="false"
+    :oneToOneUpdate="false"
+    :animateOnUpdate="false"
+  />
 </template>
 
 <script>
@@ -11,11 +20,17 @@ export default {
     VueHighcharts,
   },
   props: {
-    stats: [Object],
+    stats: Array,
+    default: () => [],
   },
   data() {
     return {
-      options: {
+      showChart: true,
+    };
+  },
+  computed: {
+    options() {
+      return {
         colors: ["#77a1e5", "#2c3e50"],
         title: {
           text: "Coins",
@@ -40,36 +55,19 @@ export default {
             rotation: 60,
           },
         },
-        series: [
-          {
-            name: "ETH",
-            data: [],
-          },
-          {
-            name: "BTC",
-            data: [],
-          },
-        ],
-      },
-    };
+        series: this.stats,
+      };
+    },
   },
   watch: {
     stats: {
-      immidiate: true,
-      handler: function (val) {
-        // create data for chart
-        const eth = new Array();
-        const btc = new Array();
-        for (let i in val) {
-          const dto = val[i];
-          eth.push([dto.time * 1000, dto.coinsPerHour]);
-          btc.push([dto.time * 1000, dto.btcPerHour]);
-        }
-        console.log(eth);
-        console.log(btc);
-        // set to chart
-        this.options.series[0].data = eth;
-        this.options.series[1].data = btc;
+      handler() {
+        // this destroys the chart
+        this.showChart = false;
+        this.$nextTick(() => {
+          // this renders a new one, with the new set of data
+          this.showChart = true;
+        });
       },
     },
   },

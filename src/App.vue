@@ -24,19 +24,19 @@
     />
   </div>
   <div class="statList">
-    <Averages :avgStats="allStats.avgStats" />
+    <Averages :avgStats="stats.avgStats" />
     <Maximums :maxStats="stats.maxStats" />
   </div>
   <div class="charts">
-    <!-- <div class="chart">
-      <UsdChart :stats="stats.stats" />
-    </div> -->
     <div class="chart">
-      <CoinChart :stats="stats.stats" />
+      <UsdChart :stats="usdStats" />
     </div>
-    <!-- <div class="chart"> -->
-    <!-- <Chart :stats="stats.stats" /> -->
-    <!-- </div> -->
+    <div class="chart">
+      <CoinChart :stats="coinStats" />
+    </div>
+    <div class="chart">
+      <Chart :stats="hsStats" />
+    </div>
   </div>
   <Footer />
 </template>
@@ -51,6 +51,47 @@ import CoinChart from "./components/CoinChart";
 import UsdChart from "./components/UsdChart";
 import Footer from "./components/Footer";
 import Button from "./components/Button";
+
+const coinDataMapper = (data) =>
+  [
+    {
+      name: "ETH",
+      prop: "coinsPerHour",
+    },
+    {
+      name: "BTC",
+      prop: "btcPerHour",
+    },
+  ].map((d) => ({
+    name: d.name,
+    data: data.map((i) => [i.time * 1000, i[d.prop]]),
+  }));
+
+const usdDataMapper = (data) =>
+  [
+    {
+      name: "USD",
+      prop: "usdPerHour",
+    },
+  ].map((d) => ({
+    name: d.name,
+    data: data.map((i) => [i.time * 1000, i[d.prop]]),
+  }));
+
+const hsDataMapper = (data) =>
+  [
+    {
+      name: "reported",
+      prop: "reportedHashrate",
+    },
+    {
+      name: "current",
+      prop: "currentHashrate",
+    },
+  ].map((d) => ({
+    name: d.name,
+    data: data.map((i) => [i.time * 1000, i[d.prop]]),
+  }));
 
 export default {
   name: "App",
@@ -67,12 +108,15 @@ export default {
   data() {
     return {
       currentFilter: String,
-      stats: {},
-      allStats: {},
-      yearStats: {},
-      monthStats: {},
-      weekStats: {},
-      dayStats: {},
+      stats: {}, // stat for Avg and Max
+      coinStats: {}, // stat for ETH and BTC
+      usdStats: {}, // stat for USD
+      hsStats: {}, // stat for Hashrate
+      allStats: {}, // fetched stat
+      yearStats: {}, // fetched stat
+      monthStats: {}, // fetched stat
+      weekStats: {}, // fetched stat
+      dayStats: {}, // fetched stat
     };
   },
   methods: {
@@ -84,6 +128,7 @@ export default {
 
       // change filter
       this.currentFilter = filter;
+      console.log(filter);
       console.log("change filter: " + filter);
 
       // handle button style
@@ -98,22 +143,34 @@ export default {
       // update stats for chart and statistik
       switch (filter) {
         case "All":
+          this.coinStats = coinDataMapper(this.allStats.stats);
+          this.usdStats = usdDataMapper(this.allStats.stats);
+          this.hsStats = hsDataMapper(this.allStats.stats);
           this.stats = this.allStats;
           break;
         case "Yearly":
+          this.coinStats = coinDataMapper(this.yearStats.stats);
+          this.usdStats = usdDataMapper(this.yearStats.stats);
+          this.hsStats = hsDataMapper(this.yearStats.stats);
           this.stats = this.yearStats;
           break;
         case "Monthly":
+          this.coinStats = coinDataMapper(this.monthStats.stats);
+          this.usdStats = usdDataMapper(this.monthStats.stats);
+          this.hsStats = hsDataMapper(this.monthStats.stats);
           this.stats = this.monthStats;
           break;
         case "Weekly":
+          this.coinStats = coinDataMapper(this.weekStats.stats);
+          this.usdStats = usdDataMapper(this.weekStats.stats);
+          this.hsStats = hsDataMapper(this.weekStats.stats);
           this.stats = this.weekStats;
           break;
         case "Daily":
+          this.coinStats = coinDataMapper(this.dayStats.stats);
+          this.usdStats = usdDataMapper(this.dayStats.stats);
+          this.hsStats = hsDataMapper(this.dayStats.stats);
           this.stats = this.dayStats;
-          break;
-        default:
-          this.stats = this.allStats;
           break;
       }
     },
@@ -140,10 +197,8 @@ export default {
       "https://ethermine-api.herokuapp.com/stats/allStats"
     );
     this.allStats = await allRes.json();
+    this.currentFilter = "All";
     this.changeFilter(this.currentFilter, true);
-  },
-  mounted() {
-    this.changeFilter("All");
   },
 };
 </script>

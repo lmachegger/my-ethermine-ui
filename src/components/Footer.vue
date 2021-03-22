@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <p>made by <a href="https://machegger.tech">Lukas Machegger</a></p>
+    <!-- <p>made by <a href="https://machegger.tech">Lukas Machegger</a></p> -->
   </footer>
 </template>
 
