@@ -85,7 +85,7 @@ const hsDataMapper = (data) =>
       prop: "reportedHashrate",
     },
     {
-      name: "current",
+      name: "actual",
       prop: "currentHashrate",
     },
   ].map((d) => ({
