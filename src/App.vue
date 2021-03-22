@@ -312,8 +312,9 @@ export default {
     justify-content: center;
   }
   .averages {
-    margin-right: 2rem;
-    margin-left: 2rem;
+    margin-right: 1.5rem;
+    margin-left: 1.5rem;
+    width: 12.9rem;
   }
 }
 @media (min-width: 2000px) {

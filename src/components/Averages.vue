@@ -66,6 +66,7 @@ export default {
 .averages {
   padding-top: 1rem;
 }
+
 .averageHeading {
   font-size: 180%;
   padding: 0.5rem;

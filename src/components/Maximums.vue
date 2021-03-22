@@ -66,6 +66,11 @@ export default {
 .averages {
   padding-top: 1rem;
 }
+@media (min-width: 615px) {
+  .averages {
+    width: 12.9rem;
+  }
+}
 .averageHeading {
   font-size: 180%;
   padding: 0.5rem;
