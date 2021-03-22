@@ -2,32 +2,32 @@
   <div class="averages">
     <h1 class="averageHeading">Maximum</h1>
     <AvgItem
-      name="MH/s reported"
+      name="MH/s reported:"
       :value="roundTo2(maxStats?.reportedHashrate)"
       precision="2"
     />
     <AvgItem
-      name="MH/s received"
+      name="MH/s received:"
       :value="roundTo2(maxStats?.currentHashrate)"
       precision="2"
     />
     <AvgItem
-      name="Shares/h"
+      name="Shares/h:"
       :value="roundTo2(maxStats?.validShares)"
       precision="0"
     />
     <AvgItem
-      name="ETH/h"
+      name="ETH/h:"
       :value="roundTo8(maxStats?.coinsPerHour)"
       precision="8"
     />
     <AvgItem
-      name="BTC/h"
+      name="BTC/h:"
       :value="roundTo8(maxStats?.btcPerHour)"
       precision="8"
     />
     <AvgItem
-      name="USD/h"
+      name="USD/h:"
       :value="roundTo8(maxStats?.usdPerHour)"
       precision="8"
     />
@@ -71,5 +71,7 @@ export default {
   font-size: 180%;
   padding: 0.5rem;
   margin: 0;
+  text-align: left;
+  padding-left: 0.3rem;
 }
 </style>

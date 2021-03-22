@@ -303,6 +303,11 @@ export default {
   display: flex;
   justify-content: center;
 }
+.statList {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 @media (min-width: 615px) {
   #app {
     max-width: 90%;
@@ -310,6 +315,7 @@ export default {
   .statList {
     display: flex;
     justify-content: center;
+    flex-direction: row;
   }
   .averages {
     margin-right: 1.5rem;
@@ -324,6 +330,7 @@ export default {
   .statList {
     display: flex;
     justify-content: center;
+    flex-direction: row;
   }
   .averages {
     margin-right: 2rem;
