@@ -24,11 +24,6 @@ export default {
   },
   computed: {
     fullValue() {
-      // if (this.precise) {
-      //   return Math.round(this.tweeningValue * 100000000) / 100000000;
-      // } else {
-      //   return Math.round(this.tweeningValue * 100) / 100;
-      // }
       const precisionVal = 10 ** this.precision;
       return Math.round(this.tweeningValue * precisionVal) / precisionVal;
     },
@@ -81,7 +76,7 @@ export default {
         precise: {
           tweeningValue: newValue,
         },
-        duration: 0.5,
+        duration: 0.55,
         ease: "sine",
       });
 

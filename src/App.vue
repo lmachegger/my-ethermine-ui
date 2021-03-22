@@ -75,6 +75,9 @@ const coinDataMapper = (data) =>
     marker: {
       enabled: false,
     },
+    animation: {
+      duration: 600,
+    },
   }));
 
 const usdDataMapper = (data) =>
@@ -88,6 +91,9 @@ const usdDataMapper = (data) =>
     data: data.map((i) => [i.time * 1000, i[d.prop]]),
     marker: {
       enabled: false,
+    },
+    animation: {
+      duration: 600,
     },
   }));
 
@@ -106,6 +112,9 @@ const hsDataMapper = (data) =>
     data: data.map((i) => [i.time * 1000, i[d.prop]]),
     marker: {
       enabled: false,
+    },
+    animation: {
+      duration: 600,
     },
   }));
 
