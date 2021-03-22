@@ -1,7 +1,7 @@
 <template>
   <Header title="Ethermine Stats" />
   <h3 class="ethWalletAdress">0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
-  <div class="filterButtons">
+  <div class="filterButtons" v-show="loaded">
     <Button
       class="filterButtonsButton"
       title="All"
@@ -23,11 +23,17 @@
       v-on:change-filter="changeFilter"
     />
   </div>
-  <div class="statList">
+  <pulse-loader
+    id="loadingSpinner"
+    :loading="!loaded"
+    :color="'#2c3e50'"
+    :size="'2.5rem'"
+  ></pulse-loader>
+  <div class="statList" v-if="loaded">
     <Averages :avgStats="stats.avgStats" />
     <Maximums :maxStats="stats.maxStats" />
   </div>
-  <div class="charts">
+  <div class="charts" v-if="loaded">
     <div class="chart">
       <UsdChart :stats="usdStats" />
     </div>
@@ -51,6 +57,7 @@ import CoinChart from "./components/CoinChart";
 import UsdChart from "./components/UsdChart";
 import Footer from "./components/Footer";
 import Button from "./components/Button";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 const coinDataMapper = (data) =>
   [
@@ -113,6 +120,7 @@ export default {
     UsdChart,
     Footer,
     Button,
+    PulseLoader,
   },
   data() {
     return {
@@ -126,6 +134,9 @@ export default {
       monthStats: {}, // fetched stat
       weekStats: {}, // fetched stat
       dayStats: {}, // fetched stat
+      maxStats: {}, // max of all stats
+      loadingSpinnerColor: "#2c3e50",
+      loaded: false,
     };
   },
   methods: {
@@ -149,6 +160,9 @@ export default {
       const button = document.getElementById(filter);
       button.className += " active";
 
+      // update maxStats
+      this.setMaxStats();
+
       // update stats for chart and statistik
       switch (filter) {
         case "All":
@@ -156,6 +170,7 @@ export default {
           this.usdStats = usdDataMapper(this.allStats.stats);
           this.hsStats = hsDataMapper(this.allStats.stats);
           this.stats = this.allStats;
+          this.stats.maxStats = this.maxStats;
           break;
         case "Yearly":
           this.coinStats = coinDataMapper(this.yearStats.stats);
@@ -183,23 +198,75 @@ export default {
           break;
       }
     },
+    setMaxStats() {
+      if (this.currentFilter != "All") {
+        this.maxStats = this.stats.maxStats;
+        return;
+      }
+      // else calc max of all stats
+      const arr = [
+        this.allStats,
+        this.yearStats,
+        this.monthStats,
+        this.weekStats,
+        this.dayStats,
+      ];
+      console.log(arr);
+
+      const reportedHashrate = Math.max(
+        ...arr.map((o) => o.maxStats?.reportedHashrate),
+        0
+      );
+
+      const currentHashrate = Math.max(
+        ...arr.map((o) => o.maxStats?.currentHashrate),
+        0
+      );
+
+      const validShares = Math.max(
+        ...arr.map((o) => o.maxStats?.validShares),
+        0
+      );
+
+      const coinsPerHour = Math.max(
+        ...arr.map((o) => o.maxStats?.coinsPerHour),
+        0
+      );
+
+      const btcPerHour = Math.max(...arr.map((o) => o.maxStats?.btcPerHour), 0);
+
+      const usdPerHour = Math.max(...arr.map((o) => o.maxStats?.usdPerHour), 0);
+
+      this.maxStats = {
+        reportedHashrate: reportedHashrate,
+        currentHashrate: currentHashrate,
+        validShares: validShares,
+        coinsPerHour: coinsPerHour,
+        btcPerHour: btcPerHour,
+        usdPerHour: usdPerHour,
+      };
+    },
   },
   async created() {
-    fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=YEAR")
-      .then((res) => res.json())
-      .then((res) => (this.yearStats = res));
+    const yearRes = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/allStats?interval=YEAR"
+    );
+    this.yearStats = await yearRes.json();
 
-    fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH")
-      .then((res) => res.json())
-      .then((res) => (this.monthStats = res));
+    const monthRes = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH"
+    );
+    this.monthStats = await monthRes.json();
 
-    fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=WEEK")
-      .then((res) => res.json())
-      .then((res) => (this.weekStats = res));
+    const weekRes = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/allStats?interval=WEEK"
+    );
+    this.weekStats = await weekRes.json();
 
-    fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=DAY")
-      .then((res) => res.json())
-      .then((res) => (this.dayStats = res));
+    const dayRes = await fetch(
+      "https://ethermine-api.herokuapp.com/stats/allStats?interval=DAY"
+    );
+    this.dayStats = await dayRes.json();
 
     // get ALL
     const allRes = await fetch(
@@ -208,6 +275,7 @@ export default {
     this.allStats = await allRes.json();
     this.currentFilter = "All";
     this.changeFilter(this.currentFilter, true);
+    this.loaded = true;
   },
 };
 </script>
@@ -265,5 +333,11 @@ export default {
   margin-top: 0.2rem;
   margin-bottom: 1.5rem;
   font-size: 80%;
+}
+#loadingSpinner {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
