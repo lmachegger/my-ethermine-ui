@@ -1,7 +1,7 @@
 <template>
   <div class="averageItem">
-    <h1 class="averageItemValue">{{ fullValue }}</h1>
     <h1 class="averageItemName">{{ name }}</h1>
+    <h1 class="averageItemValue">{{ fullValue }}</h1>
   </div>
 </template>
 
@@ -90,7 +90,7 @@ export default {
 .averageItem {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 h1 {
