@@ -65,6 +65,9 @@ const coinDataMapper = (data) =>
   ].map((d) => ({
     name: d.name,
     data: data.map((i) => [i.time * 1000, i[d.prop]]),
+    marker: {
+      enabled: false,
+    },
   }));
 
 const usdDataMapper = (data) =>
@@ -76,6 +79,9 @@ const usdDataMapper = (data) =>
   ].map((d) => ({
     name: d.name,
     data: data.map((i) => [i.time * 1000, i[d.prop]]),
+    marker: {
+      enabled: false,
+    },
   }));
 
 const hsDataMapper = (data) =>
@@ -91,6 +97,9 @@ const hsDataMapper = (data) =>
   ].map((d) => ({
     name: d.name,
     data: data.map((i) => [i.time * 1000, i[d.prop]]),
+    marker: {
+      enabled: false,
+    },
   }));
 
 export default {
