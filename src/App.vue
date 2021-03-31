@@ -108,6 +108,45 @@ const getChartData = (objects, data) => {
   }));
 };
 
+const getMaxStats = (filterStats) => {
+  // calc max of all stats
+  const arr = [
+    filterStats.allStats,
+    filterStats.yearStats,
+    filterStats.monthStats,
+    filterStats.weekStats,
+    filterStats.dayStats,
+  ];
+  console.log(arr);
+
+  const reportedHashrate = Math.max(
+    ...arr.map((o) => o.maxStats?.reportedHashrate),
+    0
+  );
+
+  const currentHashrate = Math.max(
+    ...arr.map((o) => o.maxStats?.currentHashrate),
+    0
+  );
+
+  const validShares = Math.max(...arr.map((o) => o.maxStats?.validShares), 0);
+
+  const coinsPerHour = Math.max(...arr.map((o) => o.maxStats?.coinsPerHour), 0);
+
+  const btcPerHour = Math.max(...arr.map((o) => o.maxStats?.btcPerHour), 0);
+
+  const usdPerHour = Math.max(...arr.map((o) => o.maxStats?.usdPerHour), 0);
+
+  return {
+    reportedHashrate: reportedHashrate,
+    currentHashrate: currentHashrate,
+    validShares: validShares,
+    coinsPerHour: coinsPerHour,
+    btcPerHour: btcPerHour,
+    usdPerHour: usdPerHour,
+  };
+};
+
 export default {
   name: "App",
   components: {
@@ -127,11 +166,8 @@ export default {
       stats: {}, // stat for Avg and Max
       chartStats: {}, // stats for charts
 
-      allStats: {}, // fetched stat
-      yearStats: {}, // fetched stat
-      monthStats: {}, // fetched stat
-      weekStats: {}, // fetched stat
-      dayStats: {}, // fetched stat
+      filteredStats: {}, // stats filtered by time
+
       maxStats: {}, // max of all stats
 
       loadingSpinnerColor: "#2c3e50",
@@ -147,8 +183,6 @@ export default {
 
       // change filter
       this.currentFilter = filter;
-      console.log(filter);
-      console.log("change filter: " + filter);
 
       // handle button style
       for (let button of document.getElementsByClassName(
@@ -159,109 +193,73 @@ export default {
       const button = document.getElementById(filter);
       button.className += " active";
 
-      // update maxStats
-      this.setMaxStats();
-
       // update stats for chart and statistik
       switch (filter) {
         case "All":
-          this.chartStats = statsToChartData(this.allStats.stats);
-          this.stats = this.allStats;
-          this.stats.maxStats = this.maxStats;
+          this.chartStats = statsToChartData(this.filteredStats.allStats.stats);
+          this.stats = this.filteredStats.allStats;
+          this.stats.maxStats = getMaxStats(this.filteredStats);
           break;
         case "Yearly":
-          this.chartStats = statsToChartData(this.yearStats.stats);
-          this.stats = this.yearStats;
+          this.chartStats = statsToChartData(
+            this.filteredStats.yearStats.stats
+          );
+          this.stats = this.filteredStats.yearStats;
           break;
         case "Monthly":
-          this.chartStats = statsToChartData(this.monthStats.stats);
-          this.stats = this.monthStats;
+          this.chartStats = statsToChartData(
+            this.filteredStats.monthStats.stats
+          );
+          this.stats = this.filteredStats.monthStats;
           break;
         case "Weekly":
-          this.chartStats = statsToChartData(this.weekStats.stats);
-          this.stats = this.weekStats;
+          this.chartStats = statsToChartData(
+            this.filteredStats.weekStats.stats
+          );
+          this.stats = this.filteredStats.weekStats;
           break;
         case "Daily":
-          this.chartStats = statsToChartData(this.dayStats.stats);
-          this.stats = this.dayStats;
+          this.chartStats = statsToChartData(this.filteredStats.dayStats.stats);
+          this.stats = this.filteredStats.dayStats;
           break;
       }
-    },
-    setMaxStats() {
-      if (this.currentFilter != "All") {
-        this.maxStats = this.stats.maxStats;
-        return;
-      }
-      // else calc max of all stats
-      const arr = [
-        this.allStats,
-        this.yearStats,
-        this.monthStats,
-        this.weekStats,
-        this.dayStats,
-      ];
-      console.log(arr);
-
-      const reportedHashrate = Math.max(
-        ...arr.map((o) => o.maxStats?.reportedHashrate),
-        0
-      );
-
-      const currentHashrate = Math.max(
-        ...arr.map((o) => o.maxStats?.currentHashrate),
-        0
-      );
-
-      const validShares = Math.max(
-        ...arr.map((o) => o.maxStats?.validShares),
-        0
-      );
-
-      const coinsPerHour = Math.max(
-        ...arr.map((o) => o.maxStats?.coinsPerHour),
-        0
-      );
-
-      const btcPerHour = Math.max(...arr.map((o) => o.maxStats?.btcPerHour), 0);
-
-      const usdPerHour = Math.max(...arr.map((o) => o.maxStats?.usdPerHour), 0);
-
-      this.maxStats = {
-        reportedHashrate: reportedHashrate,
-        currentHashrate: currentHashrate,
-        validShares: validShares,
-        coinsPerHour: coinsPerHour,
-        btcPerHour: btcPerHour,
-        usdPerHour: usdPerHour,
-      };
     },
   },
   async created() {
     const yearRes = await fetch(
       "https://ethermine-api.herokuapp.com/stats/allStats?interval=YEAR"
     );
-    this.yearStats = await yearRes.json();
+    const yearStats = await yearRes.json();
 
     const monthRes = await fetch(
       "https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH"
     );
-    this.monthStats = await monthRes.json();
+    const monthStats = await monthRes.json();
 
     const weekRes = await fetch(
       "https://ethermine-api.herokuapp.com/stats/allStats?interval=WEEK"
     );
-    this.weekStats = await weekRes.json();
+    const weekStats = await weekRes.json();
 
     const dayRes = await fetch(
       "https://ethermine-api.herokuapp.com/stats/allStats?interval=DAY"
     );
-    this.dayStats = await dayRes.json();
+    const dayStats = await dayRes.json();
 
     // get ALL
     const allRes = await fetch(
       "https://ethermine-api.herokuapp.com/alltimestats"
     );
-    this.allStats = await allRes.json();
+    const allStats = await allRes.json();
+
+    this.filteredStats = {
+      yearStats: yearStats,
+      monthStats: monthStats,
+      weekStats: weekStats,
+      dayStats: dayStats,
+      allStats: allStats,
+    };
+
     this.currentFilter = "All";
     this.changeFilter(this.currentFilter, true);
     this.loaded = true;
