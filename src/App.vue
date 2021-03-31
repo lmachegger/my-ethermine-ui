@@ -57,95 +57,12 @@ import UsdChart from "./components/UsdChart";
 import Footer from "./components/Footer";
 import Button from "./components/Button";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
-
-const statsToChartData = (stats) => {
-  const coins = [
-    {
-      name: "ETH",
-      prop: "coinsPerHour",
-    },
-    {
-      name: "BTC",
-      prop: "btcPerHour",
-    },
-  ];
-
-  const usd = [
-    {
-      name: "USD",
-      prop: "usdPerHour",
-    },
-  ];
-
-  const hashrates = [
-    {
-      name: "reported",
-      prop: "reportedHashrate",
-    },
-    {
-      name: "actual",
-      prop: "currentHashrate",
-    },
-  ];
-
-  return {
-    coinData: getChartData(coins, stats),
-    usdData: getChartData(usd, stats),
-    hashrateData: getChartData(hashrates, stats),
-  };
-};
-
-const getChartData = (objects, data) => {
-  return objects.map((d) => ({
-    name: d.name,
-    data: data.map((i) => [i.time * 1000, i[d.prop]]),
-    marker: {
-      enabled: false,
-    },
-    animation: {
-      duration: 600,
-    },
-  }));
-};
-
-const getMaxStats = (filterStats) => {
-  // calc max of all stats
-  const arr = [
-    filterStats.All,
-    filterStats.Yearly,
-    filterStats.Monthly,
-    filterStats.Weekly,
-    filterStats.Daily,
-  ];
-  console.log(arr);
-
-  const reportedHashrate = Math.max(
-    ...arr.map((o) => o.maxStats?.reportedHashrate),
-    0
-  );
-
-  const currentHashrate = Math.max(
-    ...arr.map((o) => o.maxStats?.currentHashrate),
-    0
-  );
-
-  const validShares = Math.max(...arr.map((o) => o.maxStats?.validShares), 0);
-
-  const coinsPerHour = Math.max(...arr.map((o) => o.maxStats?.coinsPerHour), 0);
-
-  const btcPerHour = Math.max(...arr.map((o) => o.maxStats?.btcPerHour), 0);
-
-  const usdPerHour = Math.max(...arr.map((o) => o.maxStats?.usdPerHour), 0);
-
-  return {
-    reportedHashrate: reportedHashrate,
-    currentHashrate: currentHashrate,
-    validShares: validShares,
-    coinsPerHour: coinsPerHour,
-    btcPerHour: btcPerHour,
-    usdPerHour: usdPerHour,
-  };
-};
+import { fetchData } from "./utility/fetch-data";
+import {
+  statsToChartData,
+  getChartData,
+  getMaxStats,
+} from "./utility/data-helpers";
 
 export default {
   name: "App",
@@ -171,6 +88,10 @@ export default {
     };
   },
   methods: {
+    fetchData,
+    statsToChartData,
+    getChartData,
+    getMaxStats,
     changeFilter(filter, forceUpdate = false) {
       // early return if filter has not changed
       if (this.currentFilter === filter && !forceUpdate) {
@@ -199,39 +120,7 @@ export default {
     },
   },
   async created() {
-    const yearRes = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/allStats?interval=YEAR"
-    );
-    const yearStats = await yearRes.json();
-
-    const monthRes = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH"
-    );
-    const monthStats = await monthRes.json();
-
-    const weekRes = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/allStats?interval=WEEK"
-    );
-    const weekStats = await weekRes.json();
-
-    const dayRes = await fetch(
-      "https://ethermine-api.herokuapp.com/stats/allStats?interval=DAY"
-    );
-    const dayStats = await dayRes.json();
-
-    // get ALL
-    const allRes = await fetch(
-      "https://ethermine-api.herokuapp.com/alltimestats"
-    );
-    const allStats = await allRes.json();
-
-    this.filteredStats = {
-      Yearly: yearStats,
-      Monthly: monthStats,
-      Weekly: weekStats,
-      Daily: dayStats,
-      All: allStats,
-    };
+    this.filteredStats = await fetchData();
 
     this.currentFilter = "All";
     this.changeFilter(this.currentFilter, true);
