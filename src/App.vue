@@ -35,20 +35,19 @@
   </div>
   <div class="charts" v-if="loaded">
     <div class="chart">
-      <UsdChart :stats="usdStats" />
+      <UsdChart :stats="chartStats.usdData" />
     </div>
     <div class="chart">
-      <CoinChart :stats="coinStats" />
+      <CoinChart :stats="chartStats.coinData" />
     </div>
     <div class="chart">
-      <Chart :stats="hsStats" />
+      <Chart :stats="chartStats.hashrateData" />
     </div>
   </div>
   <Footer />
 </template>
 
 <script>
-/* eslint-disable vue/no-unused-components */
 import Header from "./components/Header";
 import Averages from "./components/Averages";
 import Maximums from "./components/Maximums";
@@ -59,8 +58,8 @@ import Footer from "./components/Footer";
 import Button from "./components/Button";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
-const coinDataMapper = (data) =>
-  [
+const statsToChartData = (stats) => {
+  const coins = [
     {
       name: "ETH",
       prop: "coinsPerHour",
@@ -69,36 +68,16 @@ const coinDataMapper = (data) =>
       name: "BTC",
       prop: "btcPerHour",
     },
-  ].map((d) => ({
-    name: d.name,
-    data: data.map((i) => [i.time * 1000, i[d.prop]]),
-    marker: {
-      enabled: false,
-    },
-    animation: {
-      duration: 600,
-    },
-  }));
+  ];
 
-const usdDataMapper = (data) =>
-  [
+  const usd = [
     {
       name: "USD",
       prop: "usdPerHour",
     },
-  ].map((d) => ({
-    name: d.name,
-    data: data.map((i) => [i.time * 1000, i[d.prop]]),
-    marker: {
-      enabled: false,
-    },
-    animation: {
-      duration: 600,
-    },
-  }));
+  ];
 
-const hsDataMapper = (data) =>
-  [
+  const hashrates = [
     {
       name: "reported",
       prop: "reportedHashrate",
@@ -107,7 +86,17 @@ const hsDataMapper = (data) =>
       name: "actual",
       prop: "currentHashrate",
     },
-  ].map((d) => ({
+  ];
+
+  return {
+    coinData: getChartData(coins, stats),
+    usdData: getChartData(usd, stats),
+    hashrateData: getChartData(hashrates, stats),
+  };
+};
+
+const getChartData = (objects, data) => {
+  return objects.map((d) => ({
     name: d.name,
     data: data.map((i) => [i.time * 1000, i[d.prop]]),
     marker: {
@@ -117,6 +106,7 @@ const hsDataMapper = (data) =>
       duration: 600,
     },
   }));
+};
 
 export default {
   name: "App",
@@ -135,15 +125,15 @@ export default {
     return {
       currentFilter: String,
       stats: {}, // stat for Avg and Max
-      coinStats: [], // stat for ETH and BTC
-      usdStats: [], // stat for USD
-      hsStats: [], // stat for Hashrate
+      chartStats: {}, // stats for charts
+
       allStats: {}, // fetched stat
       yearStats: {}, // fetched stat
       monthStats: {}, // fetched stat
       weekStats: {}, // fetched stat
       dayStats: {}, // fetched stat
       maxStats: {}, // max of all stats
+
       loadingSpinnerColor: "#2c3e50",
       loaded: false,
     };
@@ -175,34 +165,24 @@ export default {
       // update stats for chart and statistik
       switch (filter) {
         case "All":
-          this.coinStats = coinDataMapper(this.allStats.stats);
-          this.usdStats = usdDataMapper(this.allStats.stats);
-          this.hsStats = hsDataMapper(this.allStats.stats);
+          this.chartStats = statsToChartData(this.allStats.stats);
           this.stats = this.allStats;
           this.stats.maxStats = this.maxStats;
           break;
         case "Yearly":
-          this.coinStats = coinDataMapper(this.yearStats.stats);
-          this.usdStats = usdDataMapper(this.yearStats.stats);
-          this.hsStats = hsDataMapper(this.yearStats.stats);
+          this.chartStats = statsToChartData(this.yearStats.stats);
           this.stats = this.yearStats;
           break;
         case "Monthly":
-          this.coinStats = coinDataMapper(this.monthStats.stats);
-          this.usdStats = usdDataMapper(this.monthStats.stats);
-          this.hsStats = hsDataMapper(this.monthStats.stats);
+          this.chartStats = statsToChartData(this.monthStats.stats);
           this.stats = this.monthStats;
           break;
         case "Weekly":
-          this.coinStats = coinDataMapper(this.weekStats.stats);
-          this.usdStats = usdDataMapper(this.weekStats.stats);
-          this.hsStats = hsDataMapper(this.weekStats.stats);
+          this.chartStats = statsToChartData(this.weekStats.stats);
           this.stats = this.weekStats;
           break;
         case "Daily":
-          this.coinStats = coinDataMapper(this.dayStats.stats);
-          this.usdStats = usdDataMapper(this.dayStats.stats);
-          this.hsStats = hsDataMapper(this.dayStats.stats);
+          this.chartStats = statsToChartData(this.dayStats.stats);
           this.stats = this.dayStats;
           break;
       }
