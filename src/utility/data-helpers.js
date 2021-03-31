@@ -57,7 +57,6 @@ export function getMaxStats(filterStats) {
         filterStats.Weekly,
         filterStats.Daily,
     ];
-    console.log(arr);
 
     const reportedHashrate = Math.max(
         ...arr.map((o) => o.maxStats?.reportedHashrate),

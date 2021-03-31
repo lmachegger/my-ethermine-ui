@@ -4,32 +4,32 @@
     <AvgItem
       name="MH/s reported:"
       :value="roundTo2(avgStats?.reportedHashrate)"
-      precision="2"
+      :precision="2"
     />
     <AvgItem
       name="MH/s received:"
       :value="roundTo2(avgStats?.currentHashrate)"
-      precision="2"
+      :precision="2"
     />
     <AvgItem
       name="Shares/h:"
       :value="roundTo2(avgStats?.validShares)"
-      precision="2"
+      :precision="2"
     />
     <AvgItem
       name="ETH/h:"
       :value="roundTo8(avgStats?.coinsPerHour)"
-      precision="8"
+      :precision="8"
     />
     <AvgItem
       name="BTC/h:"
       :value="roundTo8(avgStats?.btcPerHour)"
-      precision="8"
+      :precision="8"
     />
     <AvgItem
       name="USD/h:"
       :value="roundTo8(avgStats?.usdPerHour)"
-      precision="8"
+      :precision="8"
     />
   </div>
 </template>

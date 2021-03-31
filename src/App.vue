@@ -83,7 +83,6 @@ export default {
       stats: {}, // stat for Avg and Max
       chartStats: {}, // stats for charts
       filteredStats: {}, // stats filtered by time
-      loadingSpinnerColor: "#2c3e50",
       loaded: false,
     };
   },
@@ -101,14 +100,7 @@ export default {
       // change filter
       this.currentFilter = filter;
 
-      // handle button style
-      for (let button of document.getElementsByClassName(
-        "filterButtonsButton"
-      )) {
-        button.className = button.className.replace(" active", "");
-      }
-      const button = document.getElementById(filter);
-      button.className += " active";
+      this.handleButtonStyle(filter);
 
       // set data
       this.chartStats = statsToChartData(this.filteredStats[filter].stats);
@@ -117,6 +109,15 @@ export default {
       if (filter === "All") {
         this.stats.maxStats = getMaxStats(this.filteredStats);
       }
+    },
+    handleButtonStyle(filter) {
+      for (let button of document.getElementsByClassName(
+        "filterButtonsButton"
+      )) {
+        button.className = button.className.replace(" active", "");
+      }
+      const button = document.getElementById(filter);
+      button.className += " active";
     },
   },
   async created() {

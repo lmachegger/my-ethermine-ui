@@ -25,11 +25,13 @@ export async function fetchData() {
     );
     const allStats = await allRes.json();
 
-    return {
+    const result = {
         Yearly: yearStats,
         Monthly: monthStats,
         Weekly: weekStats,
         Daily: dayStats,
         All: allStats,
     };
+    console.log(result);
+    return result;
 }

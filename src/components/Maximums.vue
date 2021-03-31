@@ -4,34 +4,33 @@
     <AvgItem
       name="MH/s reported:"
       :value="roundTo2(maxStats?.reportedHashrate)"
-      precision="2"
+      :precision="2"
     />
     <AvgItem
       name="MH/s received:"
       :value="roundTo2(maxStats?.currentHashrate)"
-      precision="2"
+      :precision="2"
     />
     <AvgItem
       name="Shares/h:"
       :value="roundTo2(maxStats?.validShares)"
-      precision="0"
+      :precision="0"
     />
     <AvgItem
       name="ETH/h:"
       :value="roundTo8(maxStats?.coinsPerHour)"
-      precision="8"
+      :precision="8"
     />
     <AvgItem
       name="BTC/h:"
       :value="roundTo8(maxStats?.btcPerHour)"
-      precision="8"
+      :precision="8"
     />
     <AvgItem
       name="USD/h:"
       :value="roundTo8(maxStats?.usdPerHour)"
-      precision="8"
+      :precision="8"
     />
-    <!-- Math.round(num * 100) / 100 -->
   </div>
 </template>
 <script>
