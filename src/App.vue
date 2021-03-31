@@ -111,11 +111,11 @@ const getChartData = (objects, data) => {
 const getMaxStats = (filterStats) => {
   // calc max of all stats
   const arr = [
-    filterStats.allStats,
-    filterStats.yearStats,
-    filterStats.monthStats,
-    filterStats.weekStats,
-    filterStats.dayStats,
+    filterStats.All,
+    filterStats.Yearly,
+    filterStats.Monthly,
+    filterStats.Weekly,
+    filterStats.Daily,
   ];
   console.log(arr);
 
@@ -165,11 +165,7 @@ export default {
       currentFilter: String,
       stats: {}, // stat for Avg and Max
       chartStats: {}, // stats for charts
-
       filteredStats: {}, // stats filtered by time
-
-      maxStats: {}, // max of all stats
-
       loadingSpinnerColor: "#2c3e50",
       loaded: false,
     };
@@ -193,35 +189,12 @@ export default {
       const button = document.getElementById(filter);
       button.className += " active";
 
-      // update stats for chart and statistik
-      switch (filter) {
-        case "All":
-          this.chartStats = statsToChartData(this.filteredStats.allStats.stats);
-          this.stats = this.filteredStats.allStats;
-          this.stats.maxStats = getMaxStats(this.filteredStats);
-          break;
-        case "Yearly":
-          this.chartStats = statsToChartData(
-            this.filteredStats.yearStats.stats
-          );
-          this.stats = this.filteredStats.yearStats;
-          break;
-        case "Monthly":
-          this.chartStats = statsToChartData(
-            this.filteredStats.monthStats.stats
-          );
-          this.stats = this.filteredStats.monthStats;
-          break;
-        case "Weekly":
-          this.chartStats = statsToChartData(
-            this.filteredStats.weekStats.stats
-          );
-          this.stats = this.filteredStats.weekStats;
-          break;
-        case "Daily":
-          this.chartStats = statsToChartData(this.filteredStats.dayStats.stats);
-          this.stats = this.filteredStats.dayStats;
-          break;
+      // set data
+      this.chartStats = statsToChartData(this.filteredStats[filter].stats);
+      this.stats = this.filteredStats[filter];
+
+      if (filter === "All") {
+        this.stats.maxStats = getMaxStats(this.filteredStats);
       }
     },
   },
@@ -253,11 +226,11 @@ export default {
     const allStats = await allRes.json();
 
     this.filteredStats = {
-      yearStats: yearStats,
-      monthStats: monthStats,
-      weekStats: weekStats,
-      dayStats: dayStats,
-      allStats: allStats,
+      Yearly: yearStats,
+      Monthly: monthStats,
+      Weekly: weekStats,
+      Daily: dayStats,
+      All: allStats,
     };
 
     this.currentFilter = "All";
