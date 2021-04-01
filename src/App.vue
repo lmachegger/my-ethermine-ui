@@ -35,10 +35,10 @@
   </div>
   <div class="charts" v-if="loaded">
     <div class="chart">
-      <UsdChart :stats="chartStats.usdData" />
+      <Chart :stats="chartStats.usdData" />
     </div>
     <div class="chart">
-      <CoinChart :stats="chartStats.coinData" />
+      <Chart :stats="chartStats.coinData" />
     </div>
     <div class="chart">
       <Chart :stats="chartStats.hashrateData" />
@@ -51,8 +51,6 @@
 import Header from "./components/Header";
 import DataList from "./components/DataList";
 import Chart from "./components/Chart";
-import CoinChart from "./components/CoinChart";
-import UsdChart from "./components/UsdChart";
 import Footer from "./components/Footer";
 import Button from "./components/Button";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
@@ -69,8 +67,6 @@ export default {
     Header,
     DataList,
     Chart,
-    CoinChart,
-    UsdChart,
     Footer,
     Button,
     PulseLoader,
