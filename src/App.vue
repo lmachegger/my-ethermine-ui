@@ -30,8 +30,8 @@
     :size="'2.5rem'"
   ></pulse-loader>
   <div class="statList" v-if="loaded">
-    <Averages :avgStats="stats.avgStats" />
-    <Maximums :maxStats="stats.maxStats" />
+    <DataList :data="stats.avgStats" headingText="Averages" />
+    <DataList :data="stats.maxStats" headingText="Maximums" />
   </div>
   <div class="charts" v-if="loaded">
     <div class="chart">
@@ -49,8 +49,7 @@
 
 <script>
 import Header from "./components/Header";
-import Averages from "./components/Averages";
-import Maximums from "./components/Maximums";
+import DataList from "./components/DataList";
 import Chart from "./components/Chart";
 import CoinChart from "./components/CoinChart";
 import UsdChart from "./components/UsdChart";
@@ -68,8 +67,7 @@ export default {
   name: "App",
   components: {
     Header,
-    Averages,
-    Maximums,
+    DataList,
     Chart,
     CoinChart,
     UsdChart,
@@ -158,11 +156,6 @@ export default {
     justify-content: center;
     flex-direction: row;
   }
-  .averages {
-    margin-right: 1.5rem;
-    margin-left: 1.5rem;
-    width: 12.9rem;
-  }
 }
 @media (min-width: 2000px) {
   #app {
@@ -172,10 +165,6 @@ export default {
     display: flex;
     justify-content: center;
     flex-direction: row;
-  }
-  .averages {
-    margin-right: 2rem;
-    margin-left: 2rem;
   }
 }
 .charts {

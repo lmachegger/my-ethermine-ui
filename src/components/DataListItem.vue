@@ -1,7 +1,7 @@
 <template>
-  <div class="averageItem">
-    <h1 class="averageItemName">{{ name }}</h1>
-    <h1 class="averageItemValue">{{ fullValue }}</h1>
+  <div class="dataListItem">
+    <h1 class="dataListItemName">{{ name }}</h1>
+    <h1 class="dataListItemValue">{{ fullValue }}</h1>
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 import gsap from "gsap";
 
 export default {
-  name: "AvgItem",
+  name: "DataListItem",
   props: {
     name: String,
     value: {
@@ -87,7 +87,7 @@ export default {
 </script>
 
 <style scoped>
-.averageItem {
+.dataListItem {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -99,7 +99,7 @@ h1 {
   font-size: 120%;
 }
 
-.averageItemName {
+.dataListItemName {
   font-weight: 400;
 }
 </style>

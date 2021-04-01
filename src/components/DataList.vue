@@ -1,47 +1,48 @@
 <template>
-  <div class="averages">
-    <h1 class="averageHeading">Average</h1>
-    <AvgItem
+  <div class="dataList">
+    <h1 class="dataListHeading">{{ headingText }}</h1>
+    <DataListItem
       name="MH/s reported:"
-      :value="roundTo2(avgStats?.reportedHashrate)"
+      :value="roundTo2(data?.reportedHashrate)"
       :precision="2"
     />
-    <AvgItem
+    <DataListItem
       name="MH/s received:"
-      :value="roundTo2(avgStats?.currentHashrate)"
+      :value="roundTo2(data?.currentHashrate)"
       :precision="2"
     />
-    <AvgItem
+    <DataListItem
       name="Shares/h:"
-      :value="roundTo2(avgStats?.validShares)"
+      :value="roundTo2(data?.validShares)"
       :precision="2"
     />
-    <AvgItem
+    <DataListItem
       name="ETH/h:"
-      :value="roundTo8(avgStats?.coinsPerHour)"
+      :value="roundTo8(data?.coinsPerHour)"
       :precision="8"
     />
-    <AvgItem
+    <DataListItem
       name="BTC/h:"
-      :value="roundTo8(avgStats?.btcPerHour)"
+      :value="roundTo8(data?.btcPerHour)"
       :precision="8"
     />
-    <AvgItem
+    <DataListItem
       name="USD/h:"
-      :value="roundTo8(avgStats?.usdPerHour)"
+      :value="roundTo8(data?.usdPerHour)"
       :precision="8"
     />
   </div>
 </template>
 <script>
-import AvgItem from "./AverageItem";
+import DataListItem from "./DataListItem";
 export default {
-  name: "Averages",
+  name: "DataList",
   components: {
-    AvgItem,
+    DataListItem,
   },
   props: {
-    avgStats: Object,
+    data: Object,
+    headingText: String,
   },
   methods: {
     roundTo2: function (val) {
@@ -63,11 +64,25 @@ export default {
 </script>
 
 <style scoped>
-.averages {
+.dataList {
   padding-top: 1rem;
 }
 
-.averageHeading {
+@media (min-width: 615px) {
+  .dataList {
+    margin-right: 1.5rem;
+    margin-left: 1.5rem;
+    width: 12.9rem;
+  }
+}
+@media (min-width: 2000px) {
+  .dataList {
+    margin-right: 2rem;
+    margin-left: 2rem;
+  }
+}
+
+.dataListHeading {
   font-size: 180%;
   padding: 0.5rem;
   margin: 0;
