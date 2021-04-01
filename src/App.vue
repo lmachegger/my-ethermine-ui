@@ -1,6 +1,5 @@
 <template>
-  <Header title="Ethermine Stats" />
-  <h3 class="ethWalletAdress">0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0</h3>
+  <Header />
   <div class="filterButtons" v-show="loaded">
     <Button
       class="filterButtonsButton"
@@ -172,11 +171,7 @@ export default {
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
-.ethWalletAdress {
-  margin-top: 0.2rem;
-  margin-bottom: 1.5rem;
-  font-size: 80%;
-}
+
 #loadingSpinner {
   position: fixed;
   left: 50%;
