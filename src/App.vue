@@ -1,5 +1,6 @@
 <template>
   <Header />
+  <Balance :value="filteredStats.Balance" />
   <div class="filterButtons" v-show="loaded">
     <Button
       class="filterButtonsButton"
@@ -52,6 +53,7 @@ import DataList from "./components/DataList";
 import Chart from "./components/Chart";
 import Footer from "./components/Footer";
 import Button from "./components/Button";
+import Balance from "./components/Balance";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import { fetchData } from "./utility/fetch-data";
 import {
@@ -69,6 +71,7 @@ export default {
     Footer,
     Button,
     PulseLoader,
+    Balance,
   },
   data() {
     return {
