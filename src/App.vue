@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <Balance :value="filteredStats.Balance" />
+  <Balance :value="filteredStats.Balance" v-show="loaded" />
   <div class="filterButtons" v-show="loaded">
     <Button
       class="filterButtonsButton"
