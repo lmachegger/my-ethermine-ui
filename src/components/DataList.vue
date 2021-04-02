@@ -66,13 +66,13 @@ export default {
 <style scoped>
 .dataList {
   padding-top: 1rem;
+  width: 12.9rem;
 }
 
 @media (min-width: 615px) {
   .dataList {
     margin-right: 1.5rem;
     margin-left: 1.5rem;
-    width: 12.9rem;
   }
 }
 @media (min-width: 2000px) {
