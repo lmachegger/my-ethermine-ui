@@ -61,6 +61,7 @@ import {
   getChartData,
   getMaxStats,
 } from "./utility/data-helpers";
+import { gsapAddPrecisePlugin } from "./utility/gsap-helpers";
 
 export default {
   name: "App",
@@ -87,6 +88,7 @@ export default {
     statsToChartData,
     getChartData,
     getMaxStats,
+    gsapAddPrecisePlugin,
     changeFilter(filter, forceUpdate = false) {
       // early return if filter has not changed
       if (this.currentFilter === filter && !forceUpdate) {
@@ -115,6 +117,9 @@ export default {
       const button = document.getElementById(filter);
       button.className += " active";
     },
+  },
+  mounted() {
+    gsapAddPrecisePlugin();
   },
   async created() {
     this.filteredStats = await fetchData();
