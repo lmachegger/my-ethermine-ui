@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <!-- <p>made by <a href="https://machegger.tech">Lukas Machegger</a></p> -->
+    <p>made by <a href="https://machegger.tech">Lukas Machegger</a></p>
   </footer>
 </template>
 
@@ -14,7 +14,8 @@ export default {
 footer {
   align-items: center;
   margin: 0;
-  margin-bottom: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 p {
   margin: 0.5rem;
@@ -25,18 +26,15 @@ a:link {
   text-decoration: none;
 }
 
-/* visited link */
 a:visited {
   color: #2c3e50;
 }
 
-/* mouse over link */
 a:hover {
   color: #2c3e50;
   text-decoration: underline;
 }
 
-/* selected link */
 a:active {
   color: #2c3e50;
   text-decoration: underline;
