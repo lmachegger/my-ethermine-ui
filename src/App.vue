@@ -35,13 +35,13 @@
   </div>
   <div class="charts" v-if="loaded">
     <div class="chart">
-      <Chart :stats="chartStats.usdData" />
+      <Chart :stats="chartStats.usdData" chartName="Usd" />
     </div>
     <div class="chart">
-      <Chart :stats="chartStats.coinData" />
+      <Chart :stats="chartStats.coinData" chartName="Coins" />
     </div>
     <div class="chart">
-      <Chart :stats="chartStats.hashrateData" />
+      <Chart :stats="chartStats.hashrateData" chartName="Hashrate" />
     </div>
   </div>
   <Footer />
