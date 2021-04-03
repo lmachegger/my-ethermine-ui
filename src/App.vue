@@ -171,7 +171,7 @@ export default {
   }
 }
 .charts {
-  margin: 0.5rem;
+  margin: 0;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
