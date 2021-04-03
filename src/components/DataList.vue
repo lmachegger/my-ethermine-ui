@@ -34,7 +34,7 @@ export default {
 <style scoped>
 .dataList {
   padding-top: 1rem;
-  width: 13rem;
+  width: 13.2rem;
 }
 
 @media (min-width: 615px) {
