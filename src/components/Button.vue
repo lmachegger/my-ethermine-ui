@@ -18,7 +18,9 @@ button {
   display: inline-block;
   padding: 0.35em 1.2em;
   border: 0.1em solid #2c3e50;
-  margin: 0 0.8em 0 0;
+  margin: 0;
+  margin-left: 0.4em;
+  margin-right: 0.4em;
   border-radius: 0.3em;
   box-sizing: border-box;
   text-decoration: none;
