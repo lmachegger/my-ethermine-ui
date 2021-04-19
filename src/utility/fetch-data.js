@@ -40,13 +40,19 @@ export async function fetchData() {
     const balance = await balanceRes.json();
     const ethVal = parseInt(balance.result, 16) / 1000000000000000000;
 
+    const unpaidRes = await fetch(
+        'https://api.ethermine.org/miner/9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0/currentStats'
+    );
+    const unpaid = await unpaidRes.json();
+    const unpaidEth = unpaid.data.unpaid / 1000000000000000000;
+
     const result = {
         Yearly: yearStats,
         Monthly: monthStats,
         Weekly: weekStats,
         Daily: dayStats,
         All: allStats,
-        Balance: ethVal
+        Balance: ethVal + unpaidEth
     };
     console.log(result);
     return result;

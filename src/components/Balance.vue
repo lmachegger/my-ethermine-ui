@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     balance: function () {
-      return Math.round(this.tweeningValue * 100) / 100;
+      return Math.round(this.tweeningValue * 100000000) / 100000000;
     },
   },
   watch: {
