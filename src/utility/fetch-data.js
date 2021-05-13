@@ -1,53 +1,93 @@
-export async function fetchData() {
-    const monthRes = await fetch(
-        "https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH"
-    );
-    const monthStats = await monthRes.json();
+export async function fetchData(onLoad) {
+    const waitForAll = new Array();
 
-    const weekRes = await fetch(
-        "https://ethermine-api.herokuapp.com/stats/allStats?interval=WEEK"
-    );
-    const weekStats = await weekRes.json();
+    let month;
+    waitForAll.push(new Promise((resolve, reject) => {
+        fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH")
+            .then(res => res.json())
+            .then(res => {
+                month = res;
+                resolve(true);
+            })
+            .catch(err => reject(err));
+    }));
 
-    const dayRes = await fetch(
-        "https://ethermine-api.herokuapp.com/stats/allStats?interval=DAY"
-    );
-    const dayStats = await dayRes.json();
+    let week;
+    waitForAll.push(new Promise((resolve, reject) => {
+        fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=WEEK")
+            .then(res => res.json())
+            .then(res => {
+                week = res;
+                resolve(true);
+            })
+            .catch(err => reject(err));
+    }));
 
-    // get ALL
-    const allRes = await fetch(
-        "https://ethermine-api.herokuapp.com/alltimestats"
-    );
-    const allStats = await allRes.json();
+    let day;
+    waitForAll.push(new Promise((resolve, reject) => {
+        fetch("https://ethermine-api.herokuapp.com/stats/allStats?interval=DAY")
+            .then(res => res.json())
+            .then(res => {
+                day = res;
+                resolve(true);
+            })
+            .catch(err => reject(err));
+    }));
 
-    const balanceRes = await fetch('https://mainnet.infura.io/v3/e0adfa296971448280b404facf6c497e', {
-        method: 'POST',
-        body: JSON.stringify({
-            "jsonrpc": "2.0",
-            "id": 0,
-            "method": "eth_getBalance",
-            "params": [
-                "0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0",
-                "latest"
-            ],
+    let all;
+    waitForAll.push(new Promise((resolve, reject) => {
+        fetch("https://ethermine-api.herokuapp.com/alltimestats")
+            .then(res => res.json())
+            .then(res => {
+                all = res;
+                resolve(true);
+            })
+            .catch(err => reject(err));
+    }));
+
+    let paidETH;
+    waitForAll.push(new Promise((resolve, reject) => {
+        fetch('https://mainnet.infura.io/v3/e0adfa296971448280b404facf6c497e', {
+            method: 'POST',
+            body: JSON.stringify({
+                "jsonrpc": "2.0",
+                "id": 0,
+                "method": "eth_getBalance",
+                "params": [
+                    "0x9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0",
+                    "latest"
+                ],
+            })
         })
-    });
-    const balance = await balanceRes.json();
-    const ethVal = parseInt(balance.result, 16) / 1000000000000000000;
+            .then(res => res.json())
+            .then(res => {
+                paidETH = parseInt(res.result, 16) / 1000000000000000000;
+                resolve(true);
+            })
+            .catch(err => reject(err));
+    }));
 
-    const unpaidRes = await fetch(
-        'https://api.ethermine.org/miner/9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0/currentStats'
-    );
-    const unpaid = await unpaidRes.json();
-    const unpaidEth = unpaid.data.unpaid / 1000000000000000000;
+    let unpaidETH;
+    waitForAll.push(new Promise((resolve, reject) => {
+        fetch("https://api.ethermine.org/miner/9af9008cc4B5ed2A245c4F0eA042B5396bEf13e0/currentStats")
+            .then(res => res.json())
+            .then(res => {
+                unpaidETH = res.data.unpaid / 1000000000000000000;
+                resolve(true);
+            })
+            .catch(err => reject(err));
+    }));
 
-    const result = {
-        Monthly: monthStats,
-        Weekly: weekStats,
-        Daily: dayStats,
-        All: allStats,
-        Balance: ethVal + unpaidEth
-    };
-    console.log(result);
-    return result;
+    Promise.all(waitForAll)
+        .then(() => {
+            const result = {
+                Monthly: month,
+                Weekly: week,
+                Daily: day,
+                All: all,
+                Balance: paidETH + unpaidETH
+            };
+            console.log(result);
+            onLoad(result);
+        });
 }

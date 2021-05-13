@@ -122,11 +122,13 @@ export default {
     gsapAddPrecisePlugin();
   },
   async created() {
-    this.filteredStats = await fetchData();
-
-    this.currentFilter = "All";
-    this.changeFilter(this.currentFilter, true);
-    this.loaded = true;
+    // this.filteredStats = await fetchData();
+    fetchData((data) => {
+      this.filteredStats = data;
+      this.currentFilter = "All";
+      this.changeFilter(this.currentFilter, true);
+      this.loaded = true;
+    });
   },
 };
 </script>
