@@ -1,4 +1,4 @@
-export async function fetchData(onLoad) {
+export function fetchData(onLoad) {
     const waitForAll = new Array();
 
     let month;
