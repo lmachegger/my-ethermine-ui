@@ -1,9 +1,4 @@
 export async function fetchData() {
-    const yearRes = await fetch(
-        "https://ethermine-api.herokuapp.com/stats/allStats?interval=YEAR"
-    );
-    const yearStats = await yearRes.json();
-
     const monthRes = await fetch(
         "https://ethermine-api.herokuapp.com/stats/allStats?interval=MONTH"
     );
@@ -47,7 +42,6 @@ export async function fetchData() {
     const unpaidEth = unpaid.data.unpaid / 1000000000000000000;
 
     const result = {
-        Yearly: yearStats,
         Monthly: monthStats,
         Weekly: weekStats,
         Daily: dayStats,
