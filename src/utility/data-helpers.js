@@ -52,7 +52,6 @@ export function getMaxStats(filterStats) {
     // calc max of all stats
     const arr = [
         filterStats.All,
-        filterStats.Yearly,
         filterStats.Monthly,
         filterStats.Weekly,
         filterStats.Daily,
